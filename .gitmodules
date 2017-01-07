@@ -1,0 +1,6 @@
+[submodule "3rdparty/googletest"]
+	path = 3rdparty/googletest
+	url = git@github.com:marinsky/googletest.git
+[submodule "3rdparty/styleguide"]
+	path = 3rdparty/styleguide
+	url = git@github.com:marinsky/styleguide.git
