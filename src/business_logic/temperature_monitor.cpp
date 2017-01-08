@@ -1,11 +1,17 @@
 #include <algorithm>
 
 #include "business_logic/temperature_monitor.h"
+#include "data_providers/unimplemented_network_storage.h"
 
 using ::cpp_example_project::data_providers::DataStorage;
+using ::cpp_example_project::data_providers::UnimplementedNetworkStorage;
 
 namespace cpp_example_project {
 namespace business_logic {
+
+TemperatureMonitor::TemperatureMonitor()
+    : storage_(std::make_shared<UnimplementedNetworkStorage>()) {
+}
 
 TemperatureMonitor::TemperatureMonitor(const std::shared_ptr<DataStorage>& storage) {
     storage_ = storage;

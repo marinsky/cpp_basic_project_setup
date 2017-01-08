@@ -14,6 +14,9 @@ namespace business_logic {
  */
 class TemperatureMonitor {
  public:
+    // Default ctor - intializes a data provider itself
+    TemperatureMonitor();
+    // More generic ctor - gets a data provider
     explicit TemperatureMonitor(
         const std::shared_ptr<data_providers::DataStorage>& storage);
 
