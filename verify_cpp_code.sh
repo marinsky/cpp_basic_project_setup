@@ -16,7 +16,7 @@ fi
 
 # run verification script with extra settings
 # google's cpplint requires python2, can be easily ported to python3 if needed
-python2 3rdparty/styleguide/cpplint/cpplint.py \
+python2.7 3rdparty/styleguide/cpplint/cpplint.py \
     --verbose=0 \
     --counting=toplevel \
     $SCAN_FILES
