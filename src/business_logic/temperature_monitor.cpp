@@ -36,7 +36,7 @@ std::vector<int> TemperatureMonitor::get_all_saved_temperatures(
             all_saved.begin(),
             all_saved.end(),
             [](auto& elem) {
-                return TemperatureMonitor::get_fahrenheit_from_celius(elem);
+                elem = TemperatureMonitor::get_fahrenheit_from_celius(elem);
             });
     }
     return all_saved;

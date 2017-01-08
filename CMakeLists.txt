@@ -2,7 +2,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 
 project(cpp_basic_project_setup)
-message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 # Enable more warnings
 set(CXX_EXTRA_FLAGS "-Wall -Wextra -pedantic -Woverloaded-virtual \
@@ -28,12 +27,19 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   add_compile_options(-pthread)
 endif()
 
+# Redirect build output
+set(CMAKE_CURRENT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/build)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/lib)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin)
+
 add_subdirectory(
-  ./3rdparty/googletest ${CMAKE_CURRENT_BINARY_DIR}/googletest EXCLUDE_FROM_ALL)
+  ./3rdparty/googletest ${CMAKE_CURRENT_BINARY_DIR}/googletest EXCLUDE_FROM_ALL
+)
 
 # Include necessary directories
 include_directories(${gtest_SOURCE_DIR}/include)
 include_directories(${gmock_SOURCE_DIR}/include)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 include_directories(src)
 
 # Treat warnings as errors in our own code
@@ -45,19 +51,21 @@ add_library(business_logic
   src/data_providers/unimplemented_network_storage.cpp
 )
 
+SET(TESTS_EXEC "unit_tests")
+
 # Unit tests for our business_logic library
-# add_executable(${PROJECT_NAME}_tests EXCLUDE_FROM_ALL
-#   test/mocks.cpp,
-#   test/temperature_monitor_test.cpp
-# )
+add_executable(${TESTS_EXEC} EXCLUDE_FROM_ALL
+  test/mocks.cpp
+  test/temperature_monitor_test.cpp
+)
 # Standard linking to gtest & gmock stuff and our own library
-# target_link_libraries(${PROJECT_NAME}_tests business_logic gtest gmock gmock_main)
+target_link_libraries(${TESTS_EXEC} business_logic gtest gmock gmock_main)
 
 # Target for code analysis
-add_custom_target(${PROJECT_NAME}_lint ${CMAKE_CURRENT_SOURCE_DIR}/verify_cpp_code.sh)
+add_custom_target(lint ${CMAKE_CURRENT_SOURCE_DIR}/verify_cpp_code.sh)
 
 # Target for running unit tests and code style analysis
 add_custom_target(tests
-  # COMMAND ./${PROJECT_NAME}_tests
-  DEPENDS ${PROJECT_NAME}_lint
+  COMMAND ${EXECUTABLE_OUTPUT_PATH}/${TESTS_EXEC}
+  DEPENDS lint ${TESTS_EXEC}
 )
